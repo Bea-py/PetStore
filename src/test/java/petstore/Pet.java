@@ -28,8 +28,8 @@ public class Pet {
     }
 
     // Método Incluir - Create -- Post (CRUD)
-    @Test //identifica o método ou função como um teste para o TesteNG
-    public void incluirPet() throws IOException {
+    @Test (priority = 1)//identifica o método ou função como um teste para o TesteNG
+    public void incluirPet() throws IOException {  //POST
         String jsonBody = lerJson("db/pet1.json");
 //a estrutura é a mesma , o que muda é somente o caminho que vou testar e o endereço aonde está o arquivo
 
@@ -52,17 +52,33 @@ public class Pet {
                 .body("status", is("available"))
                 .body("category.name", containsString("dog"))
                 .body("tags.id",contains(2021))
+        ;
+    }
 
+    @Test (priority = 2)
+    public void consultarPet () {  //GET
+
+        String petId = "07111992";
+
+        given()
+                .contentType("application/json")
+                .log().all()
+        .when()
+                .get(uri + "/" + petId)
+
+        .then()
+                .statusCode(200)
+                .log().all()
+                .body("name", is("Billy"))
+                .body("category.name", is("dog"))
+                .body("status", is("available"))
+                .body("category.name", containsString("dog"))
+                .body("tags.id",contains(2021))
 
         ;
 
 
-
-
-
     }
-
-
 
 
 }
